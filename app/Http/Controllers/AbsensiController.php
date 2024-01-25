@@ -38,12 +38,12 @@ class AbsensiController extends Controller
     public function update(Request $request, Absensi $absensi)
     {
         $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'class' => 'sometimes|required|integer',
-            'departement' => 'sometimes|required|string|max:255',
-            'attendance' => 'sometimes|required|string|in:hadir,izin,sakit,alfa',
-            'reason' => 'sometimes|required|string|max:255',
-            'date_time' => 'sometimes|required|date_time',
+            'name' => 'required|string|max:255',
+            'class' => 'required|integer',
+            'departement' => 'required|string|max:255',
+            'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
+            'reason' => 'required|string|max:255',
+            'date_time' => 'required|date_time',
         ]);
 
         $absensi->update($validatedData);

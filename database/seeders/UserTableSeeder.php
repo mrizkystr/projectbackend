@@ -71,13 +71,13 @@ class UserTableSeeder extends Seeder
         ]);
         $kurikulum->assignRole('kurikulum');
 
-        $role = Role::find(1);
+        $role = Role::find(7);
         $permissions = Permission::all();
 
         $role->syncPermissions($permissions);
 
         //assign role with permission to user
-        $user = User::find(1);
+        $user = User::find(7);
         $user->assignRole($role->name);
     }
 }
