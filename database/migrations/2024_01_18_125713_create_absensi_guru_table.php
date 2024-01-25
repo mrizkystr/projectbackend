@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('absensi_guru', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('attedance', ['hadir', 'izin', 'sakit', 'alfa']);
+            $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);
             $table->text('reason');
             $table->dateTime('time')->nullable()->comment('Waktu absen');
             $table->timestamps();

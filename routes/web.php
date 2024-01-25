@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\AbsensiGuruController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('users', UserController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::apiResource('absensi', AbsensiController::class);
+    Route::apiResource('absensi_guru', AbsensiGuruController::class);
 });

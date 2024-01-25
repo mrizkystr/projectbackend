@@ -21,6 +21,9 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt('admin'),
         ]);
         $admin->assignRole('admin');
+        // Assign roles and permissions
+        $admin->syncRoles(['admin']);
+        $admin->syncPermissions(['create-post', 'edit-post', 'delete-post']);
 
         $murid = User::create([
             'name' => 'murid',
@@ -36,7 +39,7 @@ class UserTableSeeder extends Seeder
         ]);
         $guru->assignRole('guru');
 
-        
+
         $gurupiket = User::create([
             'name' => 'guru piket',
             'email' => 'gurupiket@gmail.com',
@@ -44,7 +47,7 @@ class UserTableSeeder extends Seeder
         ]);
         $gurupiket->assignRole('gurupiket');
 
-        
+
         $tu = User::create([
             'name' => 'tata usaha',
             'email' => 'tu@gmail.com',
@@ -52,7 +55,7 @@ class UserTableSeeder extends Seeder
         ]);
         $tu->assignRole('tatausaha');
 
-        
+
         $kepsek = User::create([
             'name' => 'Kepala Sekolah',
             'email' => 'kepsek@gmail.com',
@@ -60,7 +63,7 @@ class UserTableSeeder extends Seeder
         ]);
         $kepsek->assignRole('kepsek');
 
-        
+
         $kurikulum = User::create([
             'name' => 'kurikulum',
             'email' => 'kurikulum@gmail.com',

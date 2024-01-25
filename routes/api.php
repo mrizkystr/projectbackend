@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Api\Admin\PermissionController;
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\AbsensiGuruController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,3 +58,7 @@ Route::prefix('admin')->group(function(){
         // Route::apiResource('/posts', App\Http\Controllers\Api\Admin\PostController::class)->middleware('permission:posts.index|posts.store|posts.update|posts.delete');
     });
 });
+// Route::middleware(['auth:api'])->group(function () {
+//     Route::apiResource('/absensi', AbsensiController::class)->middleware('permission:tambah-absensi|');
+//     Route::apiResource('/absensi/guru', AbsensiGuruController::class);
+// });
