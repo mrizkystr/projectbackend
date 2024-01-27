@@ -24,10 +24,10 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('users', UserController::class);
+    Route::resource('/users', UserController::class);
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::apiResource('absensi', AbsensiController::class);
-    Route::apiResource('absensi_guru', AbsensiGuruController::class);
+    Route::apiResource('/absensi', AbsensiController::class);
+    Route::apiResource('/absensi/guru', AbsensiGuruController::class);
 });

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\SuratIzinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,3 +63,7 @@ Route::prefix('admin')->group(function(){
 //     Route::apiResource('/absensi', AbsensiController::class)->middleware('permission:tambah-absensi|');
 //     Route::apiResource('/absensi/guru', AbsensiGuruController::class);
 // });
+
+// in routes/api.php
+
+Route::apiResource('/suratIzin', SuratIzinController::class);

@@ -17,16 +17,18 @@ class PermissionTableSeeder extends Seeder
         Permission::create(['name' => 'users.create', 'guard_name' => 'api']);
         Permission::create(['name' => 'users.edit', 'guard_name' => 'api']);
         Permission::create(['name' => 'users.delete', 'guard_name' => 'api']);
+        Permission::create(['name' => 'users.show', 'guard_name' => 'api']);
 
         Permission::create(['name' => 'absensi.index', 'guard_name' => 'api']);
         Permission::create(['name' => 'absensi.create', 'guard_name' => 'api']);
         Permission::create(['name' => 'absensi.delete', 'guard_name' => 'api']);
-        Permission::create(['name' => 'absensi.read', 'guard_name' => 'api']);
+        Permission::create(['name' => 'absensi.show', 'guard_name' => 'api']);
 
         Permission::create(['name' => 'suratizin.index', 'guard_name' => 'api']);
         Permission::create(['name' => 'suratizin.create', 'guard_name' => 'api']);
         Permission::create(['name' => 'suratizin.delete', 'guard_name' => 'api']);
         Permission::create(['name' => 'suratizin.edit', 'guard_name' => 'api']);
+        Permission::create(['name' => 'suratizin.show', 'guard_name' => 'api']);
 
         Permission::create(['name' => 'suratterlambat.index','guard_name' => 'api']);
         Permission::create(['name' => 'suratterlambat.create', 'guard_name' => 'api']);
