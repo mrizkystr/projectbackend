@@ -12,7 +12,7 @@ class SuratTerlambatController extends Controller
 {
     public function index()
     {
-        Gate::authorize('suratterlambat.index');
+        Auth::authorize('suratterlambat.index');
 
         $suratTerlambat = SuratTerlambat::all();
 
@@ -21,14 +21,14 @@ class SuratTerlambatController extends Controller
 
     public function create()
     {
-        Gate::authorize('suratterlambat.create');
+        Auth::authorize('suratterlambat.create');
 
         return view('surat_terlambat.create');
     }
 
     public function store(Request $request)
     {
-        Gate::authorize('suratterlambat.create');
+        Auth::authorize('suratterlambat.create');
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -49,14 +49,14 @@ class SuratTerlambatController extends Controller
 
     public function edit(SuratTerlambat $suratTerlambat)
     {
-        Gate::authorize('suratterlambat.edit');
+        Auth::authorize('suratterlambat.edit');
 
         return view('surat_terlambat.edit', compact('suratTerlambat'));
     }
 
     public function update(Request $request, SuratTerlambat $suratTerlambat)
     {
-        Gate::authorize('suratterlambat.edit');
+        Auth::authorize('suratterlambat.edit');
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -75,7 +75,7 @@ class SuratTerlambatController extends Controller
 
     public function destroy(SuratTerlambat $suratTerlambat)
     {
-        Gate::authorize('suratterlambat.delete');
+        Auth::authorize('suratterlambat.delete');
 
         $suratTerlambat->delete();
 

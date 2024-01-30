@@ -42,3 +42,8 @@ Route::prefix('admin')->group(function(){
         Route::get('/permissions/all', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'all'])->middleware('permission:permissions.index');
     });
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::apiResource('/absensi', AbsensiController::class);
+    Route::apiResource('/absensi/guru', AbsensiGuruController::class);
+});

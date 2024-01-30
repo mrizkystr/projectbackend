@@ -2,47 +2,162 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionTableSeeder extends Seeder
 {
+    // Default permissions for different roles.
+    protected $permissionTeacher = [
+        'absensi.submit',
+        'absensi.create',
+        'absensi.delete',
+        'absensi.view',
+        'absensi.edit',
+        'suratizin.view',
+        'suratterlambat.submit',
+        'suratterlambat.create',
+        'suratterlambat.edit',
+        'suratterlambat.delete',
+        'suratterlambat.view'
+    ];
+
+    protected $permissionStudent = [
+        'absensi.submit',
+        'absensi.create',
+        'absensi.delete',
+        'absensi.view',
+        'absensi.edit',
+        'suratizin.submit',
+        'suratizin.create',
+        'suratizin.edit',
+        'suratizin.delete',
+        'suratizin.view',
+        'suratterlambat.submit',
+        'suratterlambat.create',
+        'suratterlambat.edit',
+        'suratterlambat.delete',
+        'suratterlambat.view'
+    ];
+
+    protected $permissionPicketTeacher = [
+        'absensi.submit',
+        'absensi.create',
+        'absensi.delete',
+        'absensi.view',
+        'absensi.edit',
+        'suratizin.view',
+        'suratterlambat.submit',
+        'suratterlambat.create',
+        'suratterlambat.edit',
+        'suratterlambat.delete',
+        'suratterlambat.view'
+    ];
+
+    protected $permissionPrincipal = [
+        'absensi.view',
+        'suratizin.view',
+        'suratterlambat.view'
+    ];
+
+    protected $permissionAdministrationSchool = [
+        'users.view',
+        'users.store',
+        'users.edit',
+        'users.delete',
+        'absensi.view',
+        'suratizin.view',
+        'suratterlambat.view'
+    ];
+
+    protected $permissionCurriculumTeacher = [
+        'absensi.view',
+        'suratizin.view',
+        'suratterlambat.view'
+    ];
+
+
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
-        Permission::create(['name' => 'users.index', 'guard_name' => 'api']);
-        Permission::create(['name' => 'users.create', 'guard_name' => 'api']);
-        Permission::create(['name' => 'users.edit', 'guard_name' => 'api']);
-        Permission::create(['name' => 'users.delete', 'guard_name' => 'api']);
-        Permission::create(['name' => 'users.show', 'guard_name' => 'api']);
+        // 1. Submit Absensi
+        Permission::firstOrCreate(['name' => 'absensi.submit', 'guard_name' => 'api']);
 
-        Permission::create(['name' => 'absensi.index', 'guard_name' => 'api']);
-        Permission::create(['name' => 'absensi.create', 'guard_name' => 'api']);
-        Permission::create(['name' => 'absensi.delete', 'guard_name' => 'api']);
-        Permission::create(['name' => 'absensi.show', 'guard_name' => 'api']);
+        // 2. Create Absensi
+        Permission::firstOrCreate(['name' => 'absensi.create', 'guard_name' => 'api']);
 
-        Permission::create(['name' => 'suratizin.index', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratizin.create', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratizin.delete', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratizin.edit', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratizin.show', 'guard_name' => 'api']);
+        // 3. Delete Absensi
+        Permission::firstOrCreate(['name' => 'absensi.delete', 'guard_name' => 'api']);
 
-        Permission::create(['name' => 'suratterlambat.index','guard_name' => 'api']);
-        Permission::create(['name' => 'suratterlambat.create', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratterlambat.edit', 'guard_name' => 'api']);
-        Permission::create(['name' => 'suratterlambat.delete', 'guard_name' => 'api']);
+        // 4. View Absensi
+        Permission::firstOrCreate(['name' => 'absensi.view', 'guard_name' => 'api']);
 
-         //permission for roles
-         Permission::create(['name' => 'roles.index', 'guard_name' => 'api']);
-         Permission::create(['name' => 'roles.create', 'guard_name' => 'api']);
-         Permission::create(['name' => 'roles.edit', 'guard_name' => 'api']);
-         Permission::create(['name' => 'roles.delete', 'guard_name' => 'api']);
+        // 5. Edit Absensi
+        Permission::firstOrCreate(['name' => 'absensi.edit', 'guard_name' => 'api']);
 
-        //permission for permissions
-        Permission::create(['name' => 'permissions.index', 'guard_name' => 'api']);
+        // 6. View Surat Izin
+        Permission::firstOrCreate(['name' => 'suratizin.view', 'guard_name' => 'api']);
 
+        // 7. Submit Surat Izin
+        Permission::firstOrCreate(['name' => 'suratizin.submit', 'guard_name' => 'api']);
+        
+        // 8. Create Surat Izin
+        Permission::firstOrCreate(['name' => 'suratizin.create', 'guard_name' => 'api']);
+
+        // 9. Delete Surat Izin
+        Permission::firstOrCreate(['name' => 'suratizin.delete', 'guard_name' => 'api']);
+
+        // 10. Edit Surat Izin
+        Permission::firstOrCreate(['name' => 'suratizin.edit', 'guard_name' => 'api']);
+
+        // 11. View Surat Terlambat
+        Permission::firstOrCreate(['name' => 'suratterlambat.view', 'guard_name' => 'api']);
+
+        // 12. Edit Surat Terlambat
+        Permission::firstOrCreate(['name' => 'suratterlambat.edit', 'guard_name' => 'api']);
+
+        // 13. Delete Surat Terlambat
+        Permission::firstOrCreate(['name' => 'suratterlambat.delete', 'guard_name' => 'api']);
+
+        // 14. Submit Surat Terlambat
+        Permission::firstOrCreate(['name' => 'suratterlambat.submit', 'guard_name' => 'api']);
+
+        // 15. Create Surat Terlambat
+        Permission::firstOrCreate(['name' => 'suratterlambat.create', 'guard_name' => 'api']);
+
+        // 16. View User Account
+        Permission::firstOrCreate(['name' => 'users.view', 'guard_name' => 'api']);
+
+        // 17. Create User Account
+        Permission::firstOrCreate(['name' => 'users.store', 'guard_name' => 'api']);
+
+        // 19. Edit User Account
+        Permission::firstOrCreate(['name' => 'users.edit', 'guard_name' => 'api']);
+
+        // 19. Delete User Account
+        Permission::firstOrCreate(['name' => 'users.delete', 'guard_name' => 'api']);
+
+        // Assign permissions to roles
+        $roles = Role::all();
+
+        foreach ($roles as $role) {
+            // Check the role
+            if ($role->name === 'guru') {
+                $role->syncPermissions($this->permissionTeacher);
+            } elseif ($role->name === 'murid') {
+                $role->syncPermissions($this->permissionStudent);
+            } elseif ($role->name === 'gurupiket') {
+                $role->syncPermissions($this->permissionPicketTeacher);
+            } elseif ($role->name === 'kepsek') {
+                $role->syncPermissions($this->permissionPrincipal);
+            } elseif ($role->name === 'tatausaha') {
+                $role->syncPermissions($this->permissionAdministrationSchool);
+            } elseif ($role->name === 'kurikulum') {
+                $role->syncPermissions($this->permissionCurriculumTeacher);
+            }
+        }
     }
 }
