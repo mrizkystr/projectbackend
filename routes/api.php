@@ -4,6 +4,7 @@ use App\Http\Controllers\AbsensiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\SuratIzinController;
 use App\Http\Controllers\SuratTerlambatController;
 use App\Http\Controllers\UserController;
@@ -29,6 +30,10 @@ Route::post('/login', [App\Http\Controllers\Api\Auth\LoginController::class, 'in
 Route::group(['middleware' => 'auth:api'], function () {
     // logout
     Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::prefix('admin')->group(function () {
