@@ -32,9 +32,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
 });
 
-Route::middleware('auth:api')->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
-});
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('/admin/dashboard', [DashboardController::class, 'index']);
+// });
 
 Route::prefix('admin')->group(function () {
     // group route with middleware "auth:api"
@@ -45,6 +45,8 @@ Route::prefix('admin')->group(function () {
 
         // Permissions All
         Route::get('/permissions/all', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'all'])->middleware('permission:permissions.index');
+
+        Route::get('/dashboard', [DashboardController::class, 'index']);
     });
 });
 

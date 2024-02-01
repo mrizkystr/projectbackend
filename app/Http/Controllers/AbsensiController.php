@@ -31,6 +31,7 @@ class AbsensiController extends Controller
         return new AbsensiResource($absensi);
     }
 
+
     public function show($id)
     {
         $absensi = Absensi::findOrFail($id);
@@ -55,7 +56,7 @@ class AbsensiController extends Controller
         return new AbsensiResource($absensi);
     }
 
-    
+
     public function destroy(Absensi $absensi, $id)
     {
         $absensi = Absensi::findOrFail($id);

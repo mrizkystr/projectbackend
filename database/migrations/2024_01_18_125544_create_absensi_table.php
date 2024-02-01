@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('class');
             $table->string('departement');
-            $table->enum('attendance',['hadir', 'izin'. 'sakit', 'alfa']);
+            $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);
             $table->text('reason');
             $table->timestamps();
         });
