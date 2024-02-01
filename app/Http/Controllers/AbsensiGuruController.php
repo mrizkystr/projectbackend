@@ -33,7 +33,7 @@ class AbsensiGuruController extends Controller
             'name' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
             'reason' => 'nullable|string',
-            'time' => 'nullable|date',
+            'time' => 'nullable|date_format:H:m:s',
         ]);
 
         $absensi_guru = AbsensiGuru::create($validatedData);
@@ -47,42 +47,46 @@ class AbsensiGuruController extends Controller
      * @param  \App\Models\AbsensiGuru  $absensiGuru
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(AbsensiGuru $absensiGuru)
+    public function show($id)
     {
-        return response()->json(new AbsensiGuruResource($absensiGuru));
+        $absensi_guru = AbsensiGuru::findOrFail($id);
+        return new AbsensiGuruResource($absensi_guru);
     }
-
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AbsensiGuru  $absensiGuru
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, AbsensiGuru $absensiGuru)
+    public function update(Request $request,$id)
     {
+        $absensi_guru = AbsensiGuru::findOrFail($id);
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
             'reason' => 'nullable|string',
-            'time' => 'nullable|date',
+            'time' => 'nullable|date_format:H:m:s',
         ]);
 
-        $absensiGuru->update($validatedData);
+        $absensi_guru->update($validatedData);
 
-        return response()->json(new AbsensiGuruResource($absensiGuru));
+        return response()->json(new AbsensiGuruResource($absensi_guru));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\AbsensiGuru  $absensiGuru
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(AbsensiGuru $absensiGuru)
+    public function destroy(AbsensiGuru $absensi_guru, $id)
     {
-        $absensiGuru->delete();
+        $absensi_guru = AbsensiGuru::findOrFail($id);
 
-        return response()->json(null, 204);
+        if ($absensi_guru) {
+            $absensi_guru->forceDelete();
+            return response()->json([
+                'message' => 'Data Absensi berhasil dihapus'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Data Absensi tidak ditemukan'
+            ], 404);
+        }
     }
 }

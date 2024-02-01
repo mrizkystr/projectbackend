@@ -10,11 +10,11 @@ class PermissionTableSeeder extends Seeder
 {
     // Default permissions for different roles.
     protected $permissionTeacher = [
-        'absensi.submit',
-        'absensi.create',
-        'absensi.delete',
-        'absensi.view',
-        'absensi.edit',
+        'absensi_guru.submit',
+        'absensi_guru.create',
+        'absensi_guru.delete',
+        'absensi_guru.view',
+        'absensi_guru.edit',
         'suratizin.view',
         'suratterlambat.submit',
         'suratterlambat.create',
@@ -42,11 +42,11 @@ class PermissionTableSeeder extends Seeder
     ];
 
     protected $permissionPicketTeacher = [
-        'absensi.submit',
-        'absensi.create',
-        'absensi.delete',
-        'absensi.view',
-        'absensi.edit',
+        'absensi_guru.submit',
+        'absensi_guru.create',
+        'absensi_guru.delete',
+        'absensi_guru.view',
+        'absensi_guru.edit',
         'suratizin.view',
         'suratterlambat.submit',
         'suratterlambat.create',
@@ -139,6 +139,21 @@ class PermissionTableSeeder extends Seeder
 
         // 19. Delete User Account
         Permission::firstOrCreate(['name' => 'users.delete', 'guard_name' => 'api']);
+
+        // 20. Submit Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensi_guru.submit', 'guard_name' => 'api']);
+
+        // 21. Create Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensi_guru.create', 'guard_name' => 'api']);
+  
+        // 22. Delete Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensi_guru.delete', 'guard_name' => 'api']);
+  
+        // 23. View Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensi_guru.view', 'guard_name' => 'api']);
+  
+        // 24. Edit Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensi_guru.edit', 'guard_name' => 'api']);
 
         // Assign permissions to roles
         $roles = Role::all();

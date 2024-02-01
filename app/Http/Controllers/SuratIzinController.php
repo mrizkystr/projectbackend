@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 
 class SuratIzinController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(SuratIzin::class);
-    }
+    // public function __construct()
+    // {
+    //     $this->authorizeResource(SuratIzin::class);
+    // }
 
     /**
      * Display a listing of the resource.
@@ -40,7 +40,7 @@ class SuratIzinController extends Controller
             'departement' => 'required|string|max:255',
             'permission' => 'required|string|max:255',
             'reason' => 'required|string|max:255',
-            'date_submission' => 'required|date',
+            'date_submission' => 'required|date_format:Y-m-d',
         ]);
 
         $suratIzin = SuratIzin::create($request->all());
@@ -54,8 +54,9 @@ class SuratIzinController extends Controller
      * @param  \App\Models\SuratIzin  $suratIzin
      * @return \Illuminate\Http\Response
      */
-    public function show(SuratIzin $suratIzin)
+    public function show($id)
     {
+        $suratIzin = SuratIzin::findOrFail($id);
         return new SuratIzinResource($suratIzin);
     }
 
@@ -66,15 +67,17 @@ class SuratIzinController extends Controller
      * @param  \App\Models\SuratIzin  $suratIzin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SuratIzin $suratIzin)
+    public function update(Request $request, $id)
     {
+        $suratIzin = SuratIzin::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'class' => 'required|string|max:255',
             'departement' => 'required|string|max:255',
             'permission' => 'required|string|max:255',
             'reason' => 'required|string|max:255',
-            'date_submission' => 'required|date',
+            'date_submission' => 'required|date_format:Y-m-d',
         ]);
 
         $suratIzin->update($request->all());
@@ -88,10 +91,19 @@ class SuratIzinController extends Controller
      * @param  \App\Models\SuratIzin  $suratIzin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SuratIzin $suratIzin)
+    public function destroy(SuratIzin $suratIzin, $id)
     {
-        $suratIzin->delete();
+        $suratIzin = SuratIzin::findOrFail($id);
 
-        return response()->json(null, 204);
+      if ($suratIzin) {
+            $suratIzin->forceDelete();
+            return response()->json([
+                'message' => 'Data Surat Izin berhasil dihapus'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Data Surat Izin tidak ditemukan'
+            ], 404);
+        }
     }
 }
