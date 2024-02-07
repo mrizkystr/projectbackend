@@ -1,103 +1,106 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Policies\UserPolicy;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(User::class, 'user', UserPolicy::class);
-    }
-
     public function index()
     {
         $users = User::all();
-        return view('users.index', compact('users'));
-    }
-
-    public function show(User $user)
-    {
-        return view('users.show', compact('user'));
-    }
-
-    public function create()
-    {
-        return view('users.create');
+        return UserResource::collection($users);
     }
 
     public function store(Request $request)
     {
-        // Validate the request
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'sometimes|required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+            'role' => 'required|string|in:guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
         ]);
 
-        // Create a new user
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
-            'role' => 'sometimes|required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+            'password' => Hash::make($validatedData['password']),
         ]);
 
-        // Assign roles and permissions
-        // ...
+        $role = Role::findByName($validatedData['role']);
 
-        return redirect()->route('users.index');
+        if (!$role) {
+            $role = Role::create([
+                'name' => $validatedData['role'],
+                'guard_name' => 'api',
+            ]);
+        }
+
+        $user->assignRole($request->role);
+
+        return new UserResource($user);
     }
 
-    public function edit(User $user)
+    public function show($id)
     {
-        return view('users.edit', compact('user'));
+        $user = User::findOrFail($id);
+        return new UserResource($user);
     }
 
     public function update(Request $request, User $user)
     {
-        // Validate the request
         $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $user->id,
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'password' => 'sometimes|required|string|min:8|confirmed',
-            'role' => 'sometimes|required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+            'role' => 'required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
         ]);
 
-        // Update the user
-        $user->update([
-            'name' => $validatedData['name'] ?? $user->name,
-            'email' => $validatedData['email'] ?? $user->email,
-            'password' => $validatedData['password'] ? bcrypt($validatedData['password']) : $user->password,
-            'role' => 'sometimes|required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
-        ]);
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
 
-        // Update roles and permissions
-        // ...
+        if (isset($validatedData['password'])) {
+            $user->password = Hash::make($validatedData['password']);
+        }
 
-        return redirect()->route('users.index');
+        $role = Role::findByName($validatedData['role']);
+
+        if (!$role) {
+            $role = Role::create([
+                'name' => $validatedData['role'],
+                'guard_name' => 'api',
+            ]);
+        }
+
+        $user->syncRoles([$role]);
+        $user->save();
+
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route('users.index');
-    }
-
-    // Add similar methods for other user-related permissions
-
-    // Example method for checking if the current user has a specific permission
-    public function checkPermission()
-    {
-        if (Auth::user()->can('tambah-user')) {
-            return "User has permission to add a user";
+        if ($user) {
+            $user->delete();
+            return response()->json([
+                'message' => 'Data User berhasil dihapus'
+            ], 200);
         } else {
-            return "User does not have permission to add a user";
+            return response()->json([
+                'message' => 'Data User tidak ditemukan'
+            ], 404);
         }
     }
 }

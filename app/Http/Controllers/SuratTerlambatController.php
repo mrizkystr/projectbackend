@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SuratTerlambatResource;
-use App\Models\SuratTerlambat;
 use Illuminate\Http\Request;
+use App\Models\SuratTerlambat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 

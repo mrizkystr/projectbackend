@@ -6,6 +6,7 @@ use App\Models\SuratIzin;
 use App\Http\Resources\SuratIzinResource;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class SuratIzinController extends Controller
 {

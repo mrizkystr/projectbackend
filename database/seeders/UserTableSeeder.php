@@ -15,15 +15,15 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // $admin = User::create([
-        //     'name' => 'admin',
-        //     'email' => 'admin@gmail.com',
-        //     'password' => bcrypt('admin'),
-        // ]);
-        // $admin->assignRole('admin');
-        // // Assign roles and permissions
-        // $admin->syncRoles(['admin']);
-        // $admin->syncPermissions(['create-post', 'edit-post', 'delete-post']);
+        $admin = User::create([
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin'),
+        ]);
+        $admin->assignRole('admin');
+        // Assign roles and permissions
+        $admin->syncRoles(['admin']);
+        $admin->syncPermissions(['create-post', 'edit-post', 'delete-post']);
 
         $murid = User::create([
             'name' => 'murid',
@@ -77,7 +77,7 @@ class UserTableSeeder extends Seeder
         $role->syncPermissions($permissions);
 
         //assign role with permission to user
-        $user = User::find(1);
+        $user = User::find(7);
         $user->assignRole($role->name);
     }
 }

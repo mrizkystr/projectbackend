@@ -16,10 +16,6 @@ class PermissionTableSeeder extends Seeder
         'absensi_guru.view',
         'absensi_guru.edit',
         'suratizin.view',
-        'suratterlambat.submit',
-        'suratterlambat.create',
-        'suratterlambat.edit',
-        'suratterlambat.delete',
         'suratterlambat.view'
     ];
 
@@ -48,10 +44,6 @@ class PermissionTableSeeder extends Seeder
         'absensi_guru.view',
         'absensi_guru.edit',
         'suratizin.view',
-        'suratterlambat.submit',
-        'suratterlambat.create',
-        'suratterlambat.edit',
-        'suratterlambat.delete',
         'suratterlambat.view'
     ];
 
@@ -67,6 +59,7 @@ class PermissionTableSeeder extends Seeder
         'users.edit',
         'users.delete',
         'absensi.view',
+        'absensi_guru.view',
         'suratizin.view',
         'suratterlambat.view'
     ];

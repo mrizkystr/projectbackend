@@ -7,7 +7,8 @@ use App\Http\Controllers\AbsensiGuruController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\SuratIzinController;
 use App\Http\Controllers\SuratTerlambatController;
-use App\Http\Controllers\UserController;
+// use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\Admin\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -47,6 +48,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/permissions/all', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'all'])->middleware('permission:permissions.index');
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
+
+        //users
+        Route::apiResource('/users', App\Http\Controllers\Api\Admin\UserController::class)->middleware('permission:users.index|users.store|users.update|users.delete');
     });
 });
 
@@ -86,10 +90,10 @@ Route::prefix('suratterlambat')->group(function () {
     Route::delete('/{id}', [SuratTerlambatController::class, 'destroy'])->name('suratterlambat.destroy');
 });
 
-Route::prefix('users')->group(function () {
-     // User routes
-     Route::get('/', [UserController::class, 'index'])->name('users.index');
-     Route::post('/store', [UserController::class, 'store'])->name('users.store');
-     Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
-     Route::put('/{id}', [UserController::class, 'update']);
-});
+// Route::prefix('users')->group(function () {
+//      // User routes
+//      Route::get('/', [UserController::class, 'index'])->name('users.index');
+//      Route::post('/store', [UserController::class, 'store'])->name('users.store');
+//      Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+//      Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+// });
