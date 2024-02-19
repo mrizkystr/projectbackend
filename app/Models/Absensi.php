@@ -17,6 +17,7 @@ class Absensi extends Model
         'departement',
         'attendance',
         'reason',
+        'date_time'
     ];
 
     protected $casts = [

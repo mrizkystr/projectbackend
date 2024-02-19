@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuratTerlambatController;
@@ -26,9 +27,9 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('/users', UserController::class);
-});
+// Route::middleware(['auth'])->group(function () {
+//     Route::resource('/users', UserController::class);
+// });
 
 
 // //route absensi
