@@ -148,6 +148,9 @@ class PermissionTableSeeder extends Seeder
         // 24. Edit Absensi Guru
           Permission::firstOrCreate(['name' => 'absensi_guru.edit', 'guard_name' => 'api']);
 
+        //permission for permissions
+        Permission::create(['name' => 'permissions.index', 'guard_name' => 'api']);
+
         // Assign permissions to roles
         $roles = Role::all();
 
