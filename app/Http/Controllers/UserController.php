@@ -53,6 +53,13 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
@@ -90,10 +97,13 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user, $id)
     {
+        // Auth::authorize('suratterlambat.delete');
+        $user = User::findOrFail($id);
+
         if ($user) {
-            $user->delete();
+            $user->forceDelete();
             return response()->json([
                 'message' => 'Data User berhasil dihapus'
             ], 200);

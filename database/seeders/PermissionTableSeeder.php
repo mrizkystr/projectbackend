@@ -16,7 +16,8 @@ class PermissionTableSeeder extends Seeder
         'absensi_guru.view',
         'absensi_guru.edit',
         'suratizin.view',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.view'
     ];
 
     protected $permissionStudent = [
@@ -34,7 +35,12 @@ class PermissionTableSeeder extends Seeder
         'suratterlambat.create',
         'suratterlambat.edit',
         'suratterlambat.delete',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.submit',
+        'absensimapel.create',
+        'absensimapel.edit',
+        'absensimapel.delete',
+        'absensimapel.view'
     ];
 
     protected $permissionPicketTeacher = [
@@ -44,13 +50,15 @@ class PermissionTableSeeder extends Seeder
         'absensi_guru.view',
         'absensi_guru.edit',
         'suratizin.view',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.view'
     ];
 
     protected $permissionPrincipal = [
         'absensi.view',
         'suratizin.view',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.view'
     ];
 
     protected $permissionAdministrationSchool = [
@@ -61,13 +69,15 @@ class PermissionTableSeeder extends Seeder
         'absensi.view',
         'absensi_guru.view',
         'suratizin.view',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.view'
     ];
 
     protected $permissionCurriculumTeacher = [
         'absensi.view',
         'suratizin.view',
-        'suratterlambat.view'
+        'suratterlambat.view',
+        'absensimapel.view'
     ];
 
 
@@ -147,6 +157,21 @@ class PermissionTableSeeder extends Seeder
   
         // 24. Edit Absensi Guru
           Permission::firstOrCreate(['name' => 'absensi_guru.edit', 'guard_name' => 'api']);
+
+        // 25. Submit Absensi Guru
+        Permission::firstOrCreate(['name' => 'absensimapel.submit', 'guard_name' => 'api']);
+
+        // 26. Create Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensimapel.create', 'guard_name' => 'api']);
+  
+        // 27. Delete Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensimapel.delete', 'guard_name' => 'api']);
+  
+        // 28. View Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensimapel.view', 'guard_name' => 'api']);
+  
+        // 29. Edit Absensi Guru
+          Permission::firstOrCreate(['name' => 'absensimapel.edit', 'guard_name' => 'api']);
 
         //permission for permissions
         Permission::create(['name' => 'permissions.index', 'guard_name' => 'api']);

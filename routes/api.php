@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\SuratIzinController;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\AbsensiMapelController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuratTerlambatController;
@@ -89,6 +90,15 @@ Route::prefix('suratterlambat')->group(function () {
     Route::delete('/{id}', [SuratTerlambatController::class, 'destroy'])->name('suratterlambat.destroy');
 });
 
+Route::prefix('absensimapels')->group(function () {
+    // Surat Terlambat routes
+    Route::get('/', [AbsensiMapelController::class, 'index'])->name('absensimapel.index');
+    Route::post('/store', [AbsensiMapelController::class, 'store'])->name('absensimapel.store');
+    Route::get('/{id}', [AbsensiMapelController::class, 'show'])->name('absensimapel.show');
+    Route::put('/{id}', [AbsensiMapelController::class, 'update'])->name('absensimapel.update');
+    Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
+});
+
 Route::prefix('users')->group(function () {
      // group route with middleware "auth:api"
      Route::group(['middleware' => 'auth:api'], function () {
@@ -97,5 +107,6 @@ Route::prefix('users')->group(function () {
      Route::post('/store', [UserController::class, 'store'])->name('users.store');
      Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
      Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 }); 

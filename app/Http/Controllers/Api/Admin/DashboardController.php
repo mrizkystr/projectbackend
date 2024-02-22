@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Absensi;
-use App\Models\AbsensiGuru;
-use App\Models\SuratIzin;
-use App\Models\SuratTerlambat;
 use App\Models\User;
+use App\Models\Absensi;
+use App\Models\SuratIzin;
+use App\Models\AbsensiGuru;
+use App\Models\AbsensiMapel;
 use Illuminate\Http\Request;
+use App\Models\SuratTerlambat;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\AbsensiResource;
+use App\Http\Resources\SuratIzinResource;
+use App\Http\Resources\AbsensiGuruResource;
+use App\Http\Resources\AbsensiMapelResource;
+use App\Http\Resources\SuratTerlambatResource;
 
 class DashboardController extends Controller
 {
@@ -20,6 +27,14 @@ class DashboardController extends Controller
         $absensiCount = Absensi::count();
         $absensiGuruCount = AbsensiGuru::count();
         $suratTerlambatCount = SuratTerlambat::count();
+        $absensiMapelCount = AbsensiMapel::count();
+
+        $absensi = AbsensiResource::collection(Absensi::get());
+        $absensiGuru = AbsensiGuruResource::collection(AbsensiGuru::get());
+        $suratIzin = SuratIzinResource::collection(SuratIzin::get());
+        $suratTerlambat = SuratTerlambatResource::collection(SuratTerlambat::get());
+        $absensiMapel = AbsensiMapelResource::collection(AbsensiMapel::get());
+        $users = UserResource::collection(User::get());
 
         // Return the data as a JSON response
         return response()->json([
@@ -28,6 +43,12 @@ class DashboardController extends Controller
             'absensi_count' => $absensiCount,
             'absensiguru_count' => $absensiGuruCount,
             'suratterlambat_count' => $suratTerlambatCount,
+            'absensi' =>  $absensi,
+            'absensiguru' =>  $absensiGuru,
+            'suratIzin' =>  $suratIzin,
+            'suratTerlambat' =>  $suratTerlambat,
+            'absensiMapel' => $absensiMapel,
+            'users' => $users
         ]);
     }
 }
