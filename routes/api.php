@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuratTerlambatController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\PermissionController;
+use App\Http\Controllers\BukaAbsensiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -50,8 +51,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/permissions/all', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'all'])->middleware('permission:permissions.index');
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
-
-       }); 
+    });
 });
 
 Route::prefix('absensi')->group(function () {
@@ -70,6 +70,7 @@ Route::prefix('absensi_guru')->group(function () {
     Route::get('/{id}', [AbsensiGuruController::class, 'show'])->name('absensi_guru.show');
     Route::put('/{id}', [AbsensiGuruController::class, 'update'])->name('absensi_guru.update');
     Route::delete('/{id}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
+    // routes/api.php atau routes/web.php
 });
 
 Route::prefix('suratizin')->group(function () {
@@ -91,22 +92,36 @@ Route::prefix('suratterlambat')->group(function () {
 });
 
 Route::prefix('absensimapels')->group(function () {
-    // Surat Terlambat routes
+    // Route::middleware(['auth:api', 'check.token'])->group(function () {
+    //     // Rute untuk membuka absensi
+    //     Route::post('/buka-absensi', [AbsensiMapelController::class, 'bukaAbsensi']);
+
+    //     // Rute untuk menutup absensi
+    //     Route::post('/tutup-absensi', [AbsensiMapelController::class, 'tutupAbsensi']);
+    // // Surat Terlambat routes
     Route::get('/', [AbsensiMapelController::class, 'index'])->name('absensimapel.index');
     Route::post('/store', [AbsensiMapelController::class, 'store'])->name('absensimapel.store');
     Route::get('/{id}', [AbsensiMapelController::class, 'show'])->name('absensimapel.show');
     Route::put('/{id}', [AbsensiMapelController::class, 'update'])->name('absensimapel.update');
     Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
 });
+// });
 
 Route::prefix('users')->group(function () {
-     // group route with middleware "auth:api"
-     Route::group(['middleware' => 'auth:api'], function () {
-     // User routes
-     Route::get('/', [UserController::class, 'index'])->name('users.index');
-     Route::post('/store', [UserController::class, 'store'])->name('users.store');
-     Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
-     Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
-     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    // group route with middleware "auth:api"
+    Route::group(['middleware' => 'auth:api'], function () {
+        // User routes
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::post('/store', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    });
 });
-}); 
+
+Route::prefix('buka_absensi')->group(function () {
+    // Route untuk metode store
+    Route::post('/buka-absensi', [BukaAbsensiController::class, 'store']);
+    // Route untuk metode update
+    Route::put('/update-absensi', [BukaAbsensiController::class, 'update']);
+});

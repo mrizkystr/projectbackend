@@ -6,9 +6,9 @@ use App\Models\User;
 use App\Models\Absensi;
 use App\Models\SuratIzin;
 use App\Models\AbsensiGuru;
-use App\Models\AbsensiMapel;
 use Illuminate\Http\Request;
 use App\Models\SuratTerlambat;
+use App\Models\AbsensiMapel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\AbsensiResource;
@@ -43,6 +43,7 @@ class DashboardController extends Controller
             'absensi_count' => $absensiCount,
             'absensiguru_count' => $absensiGuruCount,
             'suratterlambat_count' => $suratTerlambatCount,
+            'absensiMapel' => $absensiMapelCount,
             'absensi' =>  $absensi,
             'absensiguru' =>  $absensiGuru,
             'suratIzin' =>  $suratIzin,

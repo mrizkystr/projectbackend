@@ -17,6 +17,8 @@ class PermissionTableSeeder extends Seeder
         'absensi_guru.edit',
         'suratizin.view',
         'suratterlambat.view',
+        'membukaabsensi.create',
+        'tutupabsensi.create',
         'absensimapel.view'
     ];
 
@@ -175,6 +177,12 @@ class PermissionTableSeeder extends Seeder
 
         //permission for permissions
         Permission::create(['name' => 'permissions.index', 'guard_name' => 'api']);
+
+        //permission for permissions
+        Permission::create(['name' => 'membukaabsensi.create', 'guard_name' => 'api']);
+        
+        //permission for permissions
+        Permission::create(['name' => 'tutupabsensi.create', 'guard_name' => 'api']);
 
         // Assign permissions to roles
         $roles = Role::all();
