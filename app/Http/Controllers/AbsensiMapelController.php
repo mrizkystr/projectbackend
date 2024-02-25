@@ -40,7 +40,12 @@ class AbsensiMapelController extends Controller
         return response()->json(['message' => 'Maaf, absensi sedang ditutup.'], 403);
     }
 
-    // Jika absensi sedang dibuka, buat entri absensi baru
+    // Periksa apakah mapel yang diminta sesuai dengan mapel yang dibuka saat ini
+    if ($latest_buka_absensi && $latest_buka_absensi->mapel !== $validatedData['mapel']) {
+        return response()->json(['message' => 'Maaf, mapel yang diminta tidak sesuai dengan mapel yang dibuka saat ini.'], 403);
+    }
+
+    // Jika absensi sedang dibuka dan mapel sesuai, buat entri absensi baru
     $absensi_mapel = AbsensiMapel::create($validatedData);
 
     return response()->json(new AbsensiMapelResource($absensi_mapel), 201);

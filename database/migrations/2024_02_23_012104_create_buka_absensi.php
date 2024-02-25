@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('buka_absensi', function (Blueprint $table) {
             $table->id();
+            $table->string('mapel');
             $table->enum('status', ['Dibuka', 'Ditutup']);
             $table->timestamps();
         });

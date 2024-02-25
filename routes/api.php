@@ -123,5 +123,5 @@ Route::prefix('buka_absensi')->group(function () {
     // Route untuk metode store
     Route::post('/buka-absensi', [BukaAbsensiController::class, 'store']);
     // Route untuk metode update
-    Route::put('/update-absensi', [BukaAbsensiController::class, 'update']);
+    Route::put('/update-absensi/{id}', [BukaAbsensiController::class, 'update']);
 });
