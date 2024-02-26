@@ -28,7 +28,7 @@
             <tr>
                 <th>Nama</th>
                 <th>Kelas</th>
-                <th>Departemen</th>
+                <th>Jurusan</th>
                 <th>Kehadiran</th>
                 <th>Mapel</th>
                 <th>Alasan</th>

@@ -28,7 +28,7 @@
             <tr>
                 <th>Nama</th>
                 <th>Kelas</th>
-                <th>Departemen</th>
+                <th>Jurusan</th>
                 <th>Izin</th>
                 <th>Alasan</th>
                 <th>Tanggal Pengajuan</th>

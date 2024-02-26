@@ -7,7 +7,7 @@ use App\Http\Controllers\SuratIzinController;
 use App\Http\Controllers\AbsensiGuruController;
 use App\Http\Controllers\AbsensiMapelController;
 use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\SuratTerlambatController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\PermissionController;
@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::prefix('admin')->group(function () {
     // group route with middleware "auth:api"
-    Route::group(['middleware' => 'auth:api'], function () {
+    Route::group(['middleware' => 'auth:api', 'role:admin'], function () {
 
         // Permissions
         Route::get('/permissions', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'index'])->middleware('permission:permissions.index');
@@ -51,6 +51,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/permissions/all', [\App\Http\Controllers\Api\Admin\PermissionController::class, 'all'])->middleware('permission:permissions.index');
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
+
+        // User routes
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::post('/store', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 });
 
@@ -65,13 +72,16 @@ Route::prefix('absensi')->group(function () {
 });
 
 Route::prefix('absensi_guru')->group(function () {
-    // Absensi Guru routes
-    Route::get('/', [AbsensiGuruController::class, 'index'])->name('absensi_guru.index');
-    Route::post('/store', [AbsensiGuruController::class, 'store'])->name('absensi_guru.store');
-    Route::get('/{id}', [AbsensiGuruController::class, 'show'])->name('absensi_guru.show');
-    Route::put('/{id}', [AbsensiGuruController::class, 'update'])->name('absensi_guru.update');
-    Route::delete('/{id}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
-    Route::post('/generate-pdf', [AbsensiGuruController::class, 'generateAbsensiGuru'])->name('generate.pdf');
+    // group route with middleware "auth:api"
+    Route::group(['middleware' => 'auth:api', 'role:guru,gurupiket'], function () {
+        // Absensi Guru routes
+        Route::get('/', [AbsensiGuruController::class, 'index'])->name('absensi_guru.index');
+        Route::post('/store', [AbsensiGuruController::class, 'store'])->name('absensi_guru.store');
+        Route::get('/{id}', [AbsensiGuruController::class, 'show'])->name('absensi_guru.show');
+        Route::put('/{id}', [AbsensiGuruController::class, 'update'])->name('absensi_guru.update');
+        Route::delete('/{id}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
+        Route::post('/generate-pdf', [AbsensiGuruController::class, 'generateAbsensiGuru'])->name('generate.pdf');
+    });
 });
 
 Route::prefix('suratizin')->group(function () {
@@ -103,18 +113,6 @@ Route::prefix('absensimapels')->group(function () {
     Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
 });
 // });
-
-Route::prefix('users')->group(function () {
-    // group route with middleware "auth:api"
-    Route::group(['middleware' => 'auth:api'], function () {
-        // User routes
-        Route::get('/', [UserController::class, 'index'])->name('users.index');
-        Route::post('/store', [UserController::class, 'store'])->name('users.store');
-        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
-        Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
-        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-    });
-});
 
 Route::prefix('buka_absensi')->group(function () {
     // Route untuk metode store
