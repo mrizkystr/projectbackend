@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
 use App\Models\BukaAbsensi;
 use App\Models\AbsensiMapel;
 use Illuminate\Http\Request;
@@ -21,35 +22,37 @@ class AbsensiMapelController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'class' => 'required|integer',
-        'departement' => 'required|string|max:255',
-        'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
-        'mapel' => 'required|string',
-        'reason' => 'required|string|max:255',
-        'date_time' => 'required|date_format:Y-m-d H:i:s',
-    ]);
+    {
+        // Ambil entri BukaAbsensi yang sesuai dengan mapel yang dibuka dan status "Buka"
+        $buka_absensi = BukaAbsensi::where('mapel', $request->mapel)
+            ->where('status', 'Dibuka')
+            ->first();
 
-    // Ambil status buka absensi terkini
-    $latest_buka_absensi = BukaAbsensi::latest()->first();
+        if (!$buka_absensi) {
+            return response()->json(['message' => 'Maaf, Absensi yang anda minta tidak dibuka.'], 403);
+        }
 
-    // Periksa apakah absensi sedang dibuka
-    if ($latest_buka_absensi && $latest_buka_absensi->status === 'Ditutup') {
-        return response()->json(['message' => 'Maaf, absensi sedang ditutup.'], 403);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'class' => 'required|integer',
+            'departement' => 'required|string|max:255',
+            'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
+            'mapel' => 'required|string',
+            'reason' => 'required|string|max:255',
+            'date_time' => 'required|date_format:Y-m-d H:i:s',
+        ]);
+
+        // Periksa apakah mapel yang diminta sesuai dengan mapel yang dibuka saat ini
+        if ($buka_absensi->mapel !== $validatedData['mapel']) {
+            return response()->json(['message' => 'Mapel yang diminta tidak sesuai dengan mapel yang dibuka saat ini.'], 403);
+        }
+
+        // Buat entri baru jika semua validasi terpenuhi
+        $absensi_mapel = AbsensiMapel::create($validatedData);
+
+        return response()->json(new AbsensiMapelResource($absensi_mapel), 201);
     }
 
-    // Periksa apakah mapel yang diminta sesuai dengan mapel yang dibuka saat ini
-    if ($latest_buka_absensi && $latest_buka_absensi->mapel !== $validatedData['mapel']) {
-        return response()->json(['message' => 'Maaf, mapel yang diminta tidak sesuai dengan mapel yang dibuka saat ini.'], 403);
-    }
-
-    // Jika absensi sedang dibuka dan mapel sesuai, buat entri absensi baru
-    $absensi_mapel = AbsensiMapel::create($validatedData);
-
-    return response()->json(new AbsensiMapelResource($absensi_mapel), 201);
-}
 
 
     /**
@@ -101,46 +104,40 @@ class AbsensiMapelController extends Controller
             ], 404);
         }
     }
-    // /**
-    //  * Buka absensi.
-    //  */
-    // public function bukaAbsensi()
-    // {
-    //     // Pastikan hanya guru yang memiliki hak akses untuk membuka absensi
-    //     if (!auth()->user()->is_guru) {
-    //         return response()->json(['error' => 'Anda tidak memiliki izin untuk membuka absensi'], 403);
-    //     }
 
-    //     // Cek apakah absensi sudah dibuka sebelumnya
-    //     if (AbsensiMapel::where('status', 'buka')->exists()) {
-    //         return response()->json(['error' => 'Absensi sudah dibuka sebelumnya'], 400);
-    //     }
+    public function generateAbsensiMapel(Request $request)
+    {
+        // Ambil data absensi dari tabel 'absensi_mapels'
+        $absensiList = AbsensiMapel::all();
 
-    //     // Simpan status absensi buka ke dalam database
-    //     AbsensiMapel::create(['status' => 'buka']);
+        // Inisialisasi array untuk menyimpan data setiap absensi
+        $dataList = [];
 
-    //     return response()->json(['message' => 'Absensi berhasil dibuka']);
-    // }
+        // Loop melalui setiap absensi untuk mengambil informasi yang diperlukan
+        foreach ($absensiList as $absensi) {
+            $dataList[] = [
+                'name' => $absensi->name,
+                'class' => $absensi->class,
+                'departement' => $absensi->departement,
+                'attendance' => $absensi->attendance,
+                'mapel' => $absensi->mapel,
+                'reason' => $absensi->reason,
+                'date_time' => $absensi->date_time,
+                // Tambahkan data lain yang diperlukan
+            ];
+        }
 
-    // /**
-    //  * Tutup absensi.
-    //  */
-    // public function tutupAbsensi()
-    // {
-    //     // Pastikan hanya guru yang memiliki hak akses untuk menutup absensi
-    //     if (!auth()->user()->is_guru) {
-    //         return response()->json(['error' => 'Anda tidak memiliki izin untuk menutup absensi'], 403);
-    //     }
+        // Load view PDF dengan data yang telah ditentukan
+        $pdf = new Dompdf();
 
-    //     // Cek apakah absensi sedang dibuka
-    //     $absensi = AbsensiMapel::where('status', 'buka')->first();
-    //     if (!$absensi) {
-    //         return response()->json(['error' => 'Absensi tidak dalam status terbuka'], 400);
-    //     }
+        $html = view('laporan_absensi_mapel', compact('dataList'))->render();
 
-    //     // Simpan status absensi tutup ke dalam database
-    //     $absensi->update(['status' => 'tutup']);
+        $pdf->loadHtml($html);
 
-    //     return response()->json(['message' => 'Absensi berhasil ditutup']);
-    // }
+        // Render PDF
+        $pdf->render();
+
+        // Kembalikan file PDF sebagai respons
+        return $pdf->stream('laporan_absensi_mapel.pdf');
+    }
 }

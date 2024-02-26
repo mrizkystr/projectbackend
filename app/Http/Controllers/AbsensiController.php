@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AbsensiResource;
+use Dompdf\Dompdf;
 use App\Models\Absensi;
 use Illuminate\Http\Request;
+use App\Http\Resources\AbsensiResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -71,5 +72,40 @@ class AbsensiController extends Controller
                 'message' => 'Data Absensi tidak ditemukan'
             ], 404);
         }
+    }
+
+    public function generateAbsensi(Request $request)
+    {
+        // Ambil data absensi dari tabel 'absensi'
+        $absensiList = Absensi::all();
+
+        // Inisialisasi array untuk menyimpan data setiap absensi
+        $dataList = [];
+
+        // Loop melalui setiap absensi untuk mengambil informasi yang diperlukan
+        foreach ($absensiList as $absensi) {
+            $dataList[] = [
+                'name' => $absensi->name,
+                'class' => $absensi->class,
+                'departement' => $absensi->departement,
+                'attendance' => $absensi->attendance,
+                'reason' => $absensi->reason,
+                'date_time' => $absensi->date_time,
+                // Tambahkan data lain yang diperlukan
+            ];
+        }
+
+        // Load view PDF dengan data yang telah ditentukan
+        $pdf = new Dompdf();
+
+        $html = view('laporan_absensi_murid', compact('dataList'))->render();
+
+        $pdf->loadHtml($html);
+
+        // Render PDF
+        $pdf->render();
+
+        // Kembalikan file PDF sebagai respons
+        return $pdf->stream('laporan_absensi.pdf');
     }
 }

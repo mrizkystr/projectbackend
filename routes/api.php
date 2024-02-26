@@ -61,6 +61,7 @@ Route::prefix('absensi')->group(function () {
     Route::get('/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
     Route::put('/{id}', [AbsensiController::class, 'update'])->name('absensi.update');
     Route::delete('/{id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
+    Route::post('/generate-pdf', [AbsensiController::class, 'generateAbsensi'])->name('generate.pdf');
 });
 
 Route::prefix('absensi_guru')->group(function () {
@@ -70,7 +71,7 @@ Route::prefix('absensi_guru')->group(function () {
     Route::get('/{id}', [AbsensiGuruController::class, 'show'])->name('absensi_guru.show');
     Route::put('/{id}', [AbsensiGuruController::class, 'update'])->name('absensi_guru.update');
     Route::delete('/{id}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
-    // routes/api.php atau routes/web.php
+    Route::post('/generate-pdf', [AbsensiGuruController::class, 'generateAbsensiGuru'])->name('generate.pdf');
 });
 
 Route::prefix('suratizin')->group(function () {
@@ -80,6 +81,7 @@ Route::prefix('suratizin')->group(function () {
     Route::get('/{id}', [SuratIzinController::class, 'show'])->name('suratizin.show');
     Route::put('/{id}', [SuratIzinController::class, 'update'])->name('suratizin.update');
     Route::delete('/{id}', [SuratIzinController::class, 'destroy'])->name('suratizin.destroy');
+    Route::post('/generate-surat-izin', [SuratIzinController::class, 'generateSuratIzinReport'])->name('generate.pdf');
 });
 
 Route::prefix('suratterlambat')->group(function () {
@@ -89,21 +91,16 @@ Route::prefix('suratterlambat')->group(function () {
     Route::get('/{id}', [SuratTerlambatController::class, 'show'])->name('suratterlambat.show');
     Route::put('/{id}', [SuratTerlambatController::class, 'update'])->name('suratterlambat.update');
     Route::delete('/{id}', [SuratTerlambatController::class, 'destroy'])->name('suratterlambat.destroy');
+    Route::post('/generate-surat-terlambat', [SuratTerlambatController::class, 'generateSuratTerlambatReport'])->name('generate.pdf');
 });
 
 Route::prefix('absensimapels')->group(function () {
-    // Route::middleware(['auth:api', 'check.token'])->group(function () {
-    //     // Rute untuk membuka absensi
-    //     Route::post('/buka-absensi', [AbsensiMapelController::class, 'bukaAbsensi']);
-
-    //     // Rute untuk menutup absensi
-    //     Route::post('/tutup-absensi', [AbsensiMapelController::class, 'tutupAbsensi']);
-    // // Surat Terlambat routes
     Route::get('/', [AbsensiMapelController::class, 'index'])->name('absensimapel.index');
     Route::post('/store', [AbsensiMapelController::class, 'store'])->name('absensimapel.store');
     Route::get('/{id}', [AbsensiMapelController::class, 'show'])->name('absensimapel.show');
     Route::put('/{id}', [AbsensiMapelController::class, 'update'])->name('absensimapel.update');
     Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
+    Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
 });
 // });
 

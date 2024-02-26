@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Dompdf\Dompdf;
 use App\Models\SuratIzin;
-use App\Http\Resources\SuratIzinResource;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use App\Http\Resources\SuratIzinResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SuratIzinController extends Controller
@@ -106,5 +107,41 @@ class SuratIzinController extends Controller
                 'message' => 'Data Surat Izin tidak ditemukan'
             ], 404);
         }
+    }
+
+    
+    public function generateSuratIzinReport(Request $request)
+    {
+        // Ambil data surat izin dari tabel 'surat_izin'
+        $suratIzinList = SuratIzin::all();
+
+        // Inisialisasi array untuk menyimpan data setiap surat izin
+        $dataList = [];
+
+        // Loop melalui setiap surat izin untuk mengambil informasi yang diperlukan
+        foreach ($suratIzinList as $suratIzin) {
+            $dataList[] = [
+                'name' => $suratIzin->name,
+                'class' => $suratIzin->class,
+                'departement' => $suratIzin->departement,
+                'permission' => $suratIzin->permission,
+                'reason' => $suratIzin->reason,
+                'date_submission' => $suratIzin->date_submission,
+                // Tambahkan data lain yang diperlukan
+            ];
+        }
+
+        // Load view PDF dengan data yang telah ditentukan
+        $pdf = new Dompdf();
+
+        $html = view('laporan_surat_izin', compact('dataList'))->render();
+
+        $pdf->loadHtml($html);
+
+        // Render PDF
+        $pdf->render();
+
+        // Kembalikan file PDF sebagai respons
+        return $pdf->stream('laporan_surat_izin.pdf');
     }
 }

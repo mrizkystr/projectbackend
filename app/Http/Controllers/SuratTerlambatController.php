@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SuratTerlambatResource;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use App\Models\SuratTerlambat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\SuratTerlambatResource;
 
 class SuratTerlambatController extends Controller
 {
@@ -78,5 +79,37 @@ class SuratTerlambatController extends Controller
                 'message' => 'Data Surat Terlambat tidak ditemukan'
             ], 404);
         }
+    }
+
+    public function generateSuratTerlambatReport(Request $request)
+    {
+        // Ambil data surat terlambat dari tabel 'surat_terlambat'
+        $suratTerlambatList = SuratTerlambat::all();
+
+        // Inisialisasi array untuk menyimpan data setiap surat terlambat
+        $dataList = [];
+
+        // Loop melalui setiap surat terlambat untuk mengambil informasi yang diperlukan
+        foreach ($suratTerlambatList as $suratTerlambat) {
+            $dataList[] = [
+                'name' => $suratTerlambat->name,
+                'reason' => $suratTerlambat->reason,
+                'date_time' => $suratTerlambat->date_time,
+                // Tambahkan data lain yang diperlukan
+            ];
+        }
+
+        // Load view PDF dengan data yang telah ditentukan
+        $pdf = new Dompdf();
+
+        $html = view('laporan_surat_terlambat', compact('dataList'))->render();
+
+        $pdf->loadHtml($html);
+
+        // Render PDF
+        $pdf->render();
+
+        // Kembalikan file PDF sebagai respons
+        return $pdf->stream('laporan_surat_terlambat.pdf');
     }
 }

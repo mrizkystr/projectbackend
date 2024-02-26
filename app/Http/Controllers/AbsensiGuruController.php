@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AbsensiGuruResource;
+use Dompdf\Dompdf;
 use App\Models\AbsensiGuru;
 use Illuminate\Http\Request;
+use App\Http\Resources\AbsensiGuruResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AbsensiGuruController extends Controller
@@ -89,4 +90,38 @@ class AbsensiGuruController extends Controller
             ], 404);
         }
     }
+
+public function generateAbsensiGuru(Request $request)
+{
+    // Ambil data absensi dari tabel 'absensi_guru'
+    $absensiList = AbsensiGuru::all();
+
+    // Inisialisasi array untuk menyimpan data setiap absensi
+    $dataList = [];
+
+    // Loop melalui setiap absensi untuk mengambil informasi yang diperlukan
+    foreach ($absensiList as $absensi) {
+        $dataList[] = [
+            'name' => $absensi->name,
+            'attendance' => $absensi->attendance,
+            'reason' => $absensi->reason,
+            'date_time' => $absensi->time,
+            // Tambahkan data lain yang diperlukan
+        ];
+    }
+
+    // Load view PDF dengan data yang telah ditentukan
+    $pdf = new Dompdf();
+
+    $html = view('laporan_absensi_guru', compact('dataList'))->render();
+
+    $pdf->loadHtml($html);
+
+    // Render PDF
+    $pdf->render();
+
+    // Kembalikan file PDF sebagai respons
+    return $pdf->stream('laporan_absensi_guru.pdf');
+}
+
 }
