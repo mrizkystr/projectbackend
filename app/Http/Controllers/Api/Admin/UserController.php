@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -20,32 +21,37 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'email'     => 'required|unique:users',
+            'password'  => 'required|confirmed',
+            'role'      => 'required|string|in:guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
         ]);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-        ]);
-
-        $role = Role::findByName($validatedData['role']);
-
-        if (!$role) {
-            $role = Role::create([
-                'name' => $validatedData['role'],
-                'guard_name' => 'api',
-            ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
+        // Create user
+        $user = User::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => bcrypt($request->password),
+            'role'      => $request->role
+        ]);
+
+        // Assign role to user
         $user->assignRole($request->role);
 
-        return new UserResource($user);
+        if ($user) {
+            // Return success response
+            return new UserResource($user);
+        }
+
+        // Return failed response
+        return response()->json(['message' => 'Data User Gagal Disimpan!'], 500);
     }
+
 
     public function show($id)
     {
@@ -60,42 +66,37 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+        // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => [
-                'required',
-                'string',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'password' => 'sometimes|required|string|min:8|confirmed',
-            'role' => 'required|string|in:admin,guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:8', // optional, at least 8 characters
+            'role' => 'required|string|in:guru,murid,gurupiket,tatausaha,kepsek,kurikulum',
+            // Add validation rules for other fields as needed
         ]);
 
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Update the user's name, email, and role
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
+        $user->role = $validatedData['role'];
 
+        // Update the password if provided
         if (isset($validatedData['password'])) {
             $user->password = Hash::make($validatedData['password']);
         }
 
-        $role = Role::findByName($validatedData['role']);
-
-        if (!$role) {
-            $role = Role::create([
-                'name' => $validatedData['role'],
-                'guard_name' => 'api',
-            ]);
-        }
-
-        $user->syncRoles([$role]);
+        // Save the user
         $user->save();
 
-        return new UserResource($user);
+        // Return a response indicating success
+        return response()->json(['message' => 'User updated successfully'], 200);
     }
+
 
     public function destroy(User $user, $id)
     {
