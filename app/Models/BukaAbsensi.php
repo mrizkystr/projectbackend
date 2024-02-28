@@ -12,6 +12,7 @@ class BukaAbsensi extends Model
     protected $table = 'buka_absensi';
 
     protected $fillable = [
+        'mapel',
         'status',
     ];
 }

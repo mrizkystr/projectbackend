@@ -3,15 +3,19 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\DataSiswaController;
 use App\Http\Controllers\SuratIzinController;
+use App\Http\Controllers\AbsenKelasController;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\BukaAbsensiController;
 use App\Http\Controllers\AbsensiMapelController;
-use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Admin\UserController;
+use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\SuratTerlambatController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\PermissionController;
-use App\Http\Controllers\BukaAbsensiController;
+use App\Http\Controllers\Api\Admin\StatusSuratIzinController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,10 +40,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/logout', [App\Http\Controllers\Api\Auth\LoginController::class, 'logout']);
 });
 
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('/admin/dashboard', [DashboardController::class, 'index']);
-// });
-
 Route::prefix('admin')->group(function () {
     // group route with middleware "auth:api"
     Route::group(['middleware' => 'auth:api', 'role:admin'], function () {
@@ -58,6 +58,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        // Route for updating an existing status surat izin
+        Route::put('/status-surat-izin/{id}', [StatusSuratIzinController::class, 'updateStatus']);
     });
 });
 
@@ -84,6 +87,14 @@ Route::prefix('absensi_guru')->group(function () {
     });
 });
 
+Route::prefix('absenkelas')->group(function () {
+    Route::get('/', [AbsenKelasController::class, 'index']);
+    Route::post('/store', [AbsenKelasController::class, 'store']);
+    Route::get('/{id}', [AbsenKelasController::class, 'show']);
+    Route::put('/{id}', [AbsenKelasController::class, 'update']);
+    Route::delete('/{id}', [AbsenKelasController::class, 'destroy']);
+});
+
 Route::prefix('suratizin')->group(function () {
     // Surat Izin routes
     Route::get('/', [SuratIzinController::class, 'index'])->name('suratizin.index');
@@ -92,6 +103,7 @@ Route::prefix('suratizin')->group(function () {
     Route::put('/{id}', [SuratIzinController::class, 'update'])->name('suratizin.update');
     Route::delete('/{id}', [SuratIzinController::class, 'destroy'])->name('suratizin.destroy');
     Route::post('/generate-surat-izin', [SuratIzinController::class, 'generateSuratIzinReport'])->name('generate.pdf');
+    Route::post('/generate-surat-izin-form', [SuratIzinController::class, 'generateSuratIzinFrom'])->name('generate.pdf');
 });
 
 Route::prefix('suratterlambat')->group(function () {
@@ -112,7 +124,14 @@ Route::prefix('absensimapels')->group(function () {
     Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
     Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
 });
-// });
+
+Route::prefix('datasiswa')->group(function () {
+    Route::get('/', [DataSiswaController::class, 'index']);
+    Route::post('/store', [DataSiswaController::class, 'store']);
+    Route::get('/{id}', [DataSiswaController::class, 'show']);
+    Route::put('/{id}', [DataSiswaController::class, 'update']);
+    Route::delete('/{id}', [DataSiswaController::class, 'destroy']);
+});
 
 Route::prefix('buka_absensi')->group(function () {
     // Route untuk metode store

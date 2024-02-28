@@ -144,4 +144,39 @@ class SuratIzinController extends Controller
         // Kembalikan file PDF sebagai respons
         return $pdf->stream('laporan_surat_izin.pdf');
     }
+
+    public function generateSuratIzinFrom(Request $request)
+    {
+        // Ambil data surat izin dari tabel 'surat_izin'
+        $suratIzinList = SuratIzin::all();
+
+        // Inisialisasi array untuk menyimpan data setiap surat izin
+        $dataList = [];
+
+        // Loop melalui setiap surat izin untuk mengambil informasi yang diperlukan
+        foreach ($suratIzinList as $suratIzin) {
+            $dataList[] = [
+                'name' => $suratIzin->name,
+                'class' => $suratIzin->class,
+                'departement' => $suratIzin->departement,
+                'permission' => $suratIzin->permission,
+                'reason' => $suratIzin->reason,
+                'date_submission' => $suratIzin->date_submission,
+                // Tambahkan data lain yang diperlukan
+            ];
+        }
+
+        // Load view PDF dengan data yang telah ditentukan
+        $pdf = new Dompdf();
+
+        $html = view('surat_izin_form', compact('dataList'))->render();
+
+        $pdf->loadHtml($html);
+
+        // Render PDF
+        $pdf->render();
+
+        // Kembalikan file PDF sebagai respons
+        return $pdf->stream('surat_izin_form.pdf');
+    }
 }

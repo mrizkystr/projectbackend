@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 use App\Models\SuratTerlambat;
 use App\Models\AbsensiMapel;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AbsenKelasResource;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\AbsensiResource;
 use App\Http\Resources\SuratIzinResource;
 use App\Http\Resources\AbsensiGuruResource;
 use App\Http\Resources\AbsensiMapelResource;
 use App\Http\Resources\SuratTerlambatResource;
+use App\Models\AbsenKelas;
 
 class DashboardController extends Controller
 {
@@ -28,12 +30,14 @@ class DashboardController extends Controller
         $absensiGuruCount = AbsensiGuru::count();
         $suratTerlambatCount = SuratTerlambat::count();
         $absensiMapelCount = AbsensiMapel::count();
+        $absenKelasCount = AbsenKelas::count();
 
         $absensi = AbsensiResource::collection(Absensi::get());
         $absensiGuru = AbsensiGuruResource::collection(AbsensiGuru::get());
         $suratIzin = SuratIzinResource::collection(SuratIzin::get());
         $suratTerlambat = SuratTerlambatResource::collection(SuratTerlambat::get());
         $absensiMapel = AbsensiMapelResource::collection(AbsensiMapel::get());
+        $absenKelas = AbsenKelasResource::collection(AbsenKelas::get());
         $users = UserResource::collection(User::get());
 
         // Return the data as a JSON response
@@ -44,12 +48,14 @@ class DashboardController extends Controller
             'absensiguru_count' => $absensiGuruCount,
             'suratterlambat_count' => $suratTerlambatCount,
             'absensiMapel' => $absensiMapelCount,
+            'absenKelas' => $absenKelasCount,
             'absensi' =>  $absensi,
             'absensiguru' =>  $absensiGuru,
             'suratIzin' =>  $suratIzin,
             'suratTerlambat' =>  $suratTerlambat,
             'absensiMapel' => $absensiMapel,
-            'users' => $users
+            'users' => $users,
+            'absenKelas' => $absenKelas
         ]);
     }
 }
