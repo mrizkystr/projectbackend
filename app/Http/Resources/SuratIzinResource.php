@@ -19,7 +19,6 @@ class SuratIzinResource extends JsonResource
             'name' => $this->name,
             'class' => $this->class,
             'departement' => $this->departement,
-            'permission' => $this->permission,
             'reason' => $this->reason,
             'date_submission' => $this->date_submission,
             'created_at' => $this->created_at,

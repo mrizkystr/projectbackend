@@ -64,17 +64,19 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('absensi')->group(function () {
     // Absensi routes
-    Route::get('/', [AbsensiController::class, 'index'])->name('absensi.index');
-    Route::post('/store', [AbsensiController::class, 'store'])->name('absensi.store');
-    Route::get('/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
-    Route::put('/{id}', [AbsensiController::class, 'update'])->name('absensi.update');
-    Route::delete('/{id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
-    Route::post('/generate-pdf', [AbsensiController::class, 'generateAbsensi'])->name('generate.pdf');
+    Route::middleware(['auth:api', 'role:murid|guru|gurupiket|admin'])->group(function () {
+        Route::get('/', [AbsensiController::class, 'index'])->name('absensi.index');
+        Route::post('/store', [AbsensiController::class, 'store'])->name('absensi.store');
+        Route::get('/{id}', [AbsensiController::class, 'show'])->name('absensi.show');
+        Route::put('/{id}', [AbsensiController::class, 'update'])->name('absensi.update');
+        Route::delete('/{id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
+        Route::post('/generate-pdf', [AbsensiController::class, 'generateAbsensi'])->name('generate.pdf');
+    });
 });
 
 Route::prefix('absensi_guru')->group(function () {
-    // group route with middleware "auth:api"
-    Route::group(['middleware' => 'auth:api', 'role:guru,gurupiket'], function () {
+    // group route with middleware "auth:api" and roles "guru" dan "gurupiket"
+    Route::middleware(['auth:api', 'role:guru|gurupiket'])->group(function () {
         // Absensi Guru routes
         Route::get('/', [AbsensiGuruController::class, 'index'])->name('absensi_guru.index');
         Route::post('/store', [AbsensiGuruController::class, 'store'])->name('absensi_guru.store');
@@ -86,67 +88,76 @@ Route::prefix('absensi_guru')->group(function () {
 });
 
 Route::prefix('absenkelas')->group(function () {
-    Route::get('/', [AbsenKelasController::class, 'index']);
-    Route::post('/store', [AbsenKelasController::class, 'store']);
-    Route::get('/{id}', [AbsenKelasController::class, 'show']);
-    Route::put('/{id}', [AbsenKelasController::class, 'update']);
-    Route::delete('/{id}', [AbsenKelasController::class, 'destroy']);
+    Route::middleware(['auth:api', 'role:murid|guru|admin'])->group(function () {
+        Route::get('/', [AbsenKelasController::class, 'index']);
+        Route::post('/store', [AbsenKelasController::class, 'store']);
+        Route::get('/{id}', [AbsenKelasController::class, 'show']);
+        Route::put('/{id}', [AbsenKelasController::class, 'update']);
+        Route::delete('/{id}', [AbsenKelasController::class, 'destroy']);
+    });
 });
 
 Route::prefix('suratizin')->group(function () {
     // Surat Izin routes
-    Route::get('/', [SuratIzinController::class, 'index'])->name('suratizin.index');
-    Route::post('/store', [SuratIzinController::class, 'store'])->name('suratizin.store');
-    Route::get('/{id}', [SuratIzinController::class, 'show'])->name('suratizin.show');
-    Route::put('/{id}', [SuratIzinController::class, 'update'])->name('suratizin.update');
-    Route::delete('/{id}', [SuratIzinController::class, 'destroy'])->name('suratizin.destroy');
-    Route::post('/generate-surat-izin', [SuratIzinController::class, 'generateSuratIzinReport'])->name('generate.pdf');
-    Route::post('/generate-surat-izin-form', [SuratIzinController::class, 'generateSuratIzinFrom'])->name('generate.pdf');
+    Route::middleware(['auth:api', 'role:murid|admin'])->group(function () {
+        Route::get('/', [SuratIzinController::class, 'index'])->name('suratizin.index');
+        Route::post('/store', [SuratIzinController::class, 'store'])->name('suratizin.store');
+        Route::get('/{id}', [SuratIzinController::class, 'show'])->name('suratizin.show');
+        Route::put('/{id}', [SuratIzinController::class, 'update'])->name('suratizin.update');
+        Route::delete('/{id}', [SuratIzinController::class, 'destroy'])->name('suratizin.destroy');
+        Route::post('/generate-surat-izin', [SuratIzinController::class, 'generateSuratIzinReport'])->name('generate.pdf');
+        Route::post('/generate-surat-izin-form', [SuratIzinController::class, 'generateSuratIzinFrom'])->name('generate.pdf');
+    });
 });
 
 Route::prefix('suratterlambat')->group(function () {
     // Surat Terlambat routes
-    Route::get('/', [SuratTerlambatController::class, 'index'])->name('suratterlambat.index');
-    Route::post('/store', [SuratTerlambatController::class, 'store'])->name('suratterlambat.store');
-    Route::get('/{id}', [SuratTerlambatController::class, 'show'])->name('suratterlambat.show');
-    Route::put('/{id}', [SuratTerlambatController::class, 'update'])->name('suratterlambat.update');
-    Route::delete('/{id}', [SuratTerlambatController::class, 'destroy'])->name('suratterlambat.destroy');
-    Route::post('/generate-surat-terlambat', [SuratTerlambatController::class, 'generateSuratTerlambatReport'])->name('generate.pdf');
+    Route::middleware(['auth:api', 'role:gurupiket|admin'])->group(function () {
+        Route::get('/', [SuratTerlambatController::class, 'index'])->name('suratterlambat.index');
+        Route::post('/store', [SuratTerlambatController::class, 'store'])->name('suratterlambat.store');
+        Route::get('/{id}', [SuratTerlambatController::class, 'show'])->name('suratterlambat.show');
+        Route::put('/{id}', [SuratTerlambatController::class, 'update'])->name('suratterlambat.update');
+        Route::delete('/{id}', [SuratTerlambatController::class, 'destroy'])->name('suratterlambat.destroy');
+        Route::post('/generate-surat-terlambat', [SuratTerlambatController::class, 'generateSuratTerlambatReport'])->name('generate.pdf');
+    });
 });
 
 Route::prefix('absensimapels')->group(function () {
-    Route::get('/', [AbsensiMapelController::class, 'index'])->name('absensimapel.index');
-    Route::post('/store', [AbsensiMapelController::class, 'store'])->name('absensimapel.store');
-    Route::get('/{id}', [AbsensiMapelController::class, 'show'])->name('absensimapel.show');
-    Route::put('/{id}', [AbsensiMapelController::class, 'update'])->name('absensimapel.update');
-    Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
-    Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
+    Route::middleware(['auth:api', 'role:murid|guru|admin'])->group(function () {
+        Route::get('/', [AbsensiMapelController::class, 'index'])->name('absensimapel.index');
+        Route::post('/store', [AbsensiMapelController::class, 'store'])->name('absensimapel.store');
+        Route::get('/{id}', [AbsensiMapelController::class, 'show'])->name('absensimapel.show');
+        Route::put('/{id}', [AbsensiMapelController::class, 'update'])->name('absensimapel.update');
+        Route::delete('/{id}', [AbsensiMapelController::class, 'destroy'])->name('absensimapel.destroy');
+        Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
+    });
 });
 
 Route::prefix('datasiswas')->group(function () {
-    Route::get('/', [DataSiswaController::class, 'index']);
-    Route::post('/store', [DataSiswaController::class, 'store']);
-    Route::get('/{id}', [DataSiswaController::class, 'show']);
-    Route::put('/{id}', [DataSiswaController::class, 'update']);
-    Route::delete('/{id}', [DataSiswaController::class, 'destroy']);
+    Route::middleware(['auth:api', 'role:murid|admin'])->group(function () {
+        Route::get('/', [DataSiswaController::class, 'index']);
+        Route::post('/store', [DataSiswaController::class, 'store']);
+        Route::get('/{id}', [DataSiswaController::class, 'show']);
+        Route::put('/{id}', [DataSiswaController::class, 'update']);
+        Route::delete('/{id}', [DataSiswaController::class, 'destroy']);
+    });
 });
 
 Route::prefix('dataguru')->group(function () {
-    // Route untuk menampilkan semua data guru
-    Route::get('/', [DataGuruController::class, 'index']);
-    // Route untuk menampilkan detail data guru berdasarkan ID
-    Route::get('/{id}', [DataGuruController::class, 'show']);
-    // Route untuk menyimpan data guru baru
-    Route::post('/store', [DataGuruController::class, 'store']);
-    // Route untuk memperbarui data guru berdasarkan ID
-    Route::put('/id}', [DataGuruController::class, 'update']);
-    // Route untuk menghapus data guru berdasarkan ID
-    Route::delete('/{id}', [DataGuruController::class, 'destroy']);
+    Route::middleware(['auth:api', 'role:guru|gurupiket|admin'])->group(function () {
+        Route::get('/', [DataGuruController::class, 'index']);
+        Route::get('/{id}', [DataGuruController::class, 'show']);
+        Route::post('/store', [DataGuruController::class, 'store']);
+        Route::put('/{id}', [DataGuruController::class, 'update']);
+        Route::delete('/{id}', [DataGuruController::class, 'destroy']);
+    });
 });
 
 Route::prefix('buka_absensi')->group(function () {
     // Route untuk metode store
-    Route::post('/buka-absensi', [BukaAbsensiController::class, 'store']);
-    // Route untuk metode update
-    Route::put('/update-absensi/{id}', [BukaAbsensiController::class, 'update']);
+    Route::middleware(['auth:api'])->group(function () {
+        Route::post('/buka-absensi', [BukaAbsensiController::class, 'store']);
+        // Route untuk metode update
+        Route::put('/update-absensi/{id}', [BukaAbsensiController::class, 'update']);
+    });
 });

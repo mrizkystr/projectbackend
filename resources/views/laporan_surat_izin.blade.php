@@ -29,7 +29,6 @@
                 <th>Nama</th>
                 <th>Kelas</th>
                 <th>Jurusan</th>
-                <th>Izin</th>
                 <th>Alasan</th>
                 <th>Tanggal Pengajuan</th>
             </tr>
@@ -40,7 +39,6 @@
                     <td>{{ $data['name'] }}</td>
                     <td>{{ $data['class'] }}</td>
                     <td>{{ $data['departement'] }}</td>
-                    <td>{{ $data['permission'] }}</td>
                     <td>{{ $data['reason'] }}</td>
                     <td>{{ $data['date_submission'] }}</td>
                 </tr>

@@ -40,7 +40,6 @@ class SuratIzinController extends Controller
             'name' => 'required|string|max:255',
             'class' => 'required|string|max:255',
             'departement' => 'required|string|max:255',
-            'permission' => 'required|string|max:255',
             'reason' => 'required|string|max:255',
             'date_submission' => 'required|date_format:Y-m-d',
         ]);
@@ -77,7 +76,6 @@ class SuratIzinController extends Controller
             'name' => 'required|string|max:255',
             'class' => 'required|string|max:255',
             'departement' => 'required|string|max:255',
-            'permission' => 'required|string|max:255',
             'reason' => 'required|string|max:255',
             'date_submission' => 'required|date_format:Y-m-d',
         ]);
@@ -124,7 +122,6 @@ class SuratIzinController extends Controller
                 'name' => $suratIzin->name,
                 'class' => $suratIzin->class,
                 'departement' => $suratIzin->departement,
-                'permission' => $suratIzin->permission,
                 'reason' => $suratIzin->reason,
                 'date_submission' => $suratIzin->date_submission,
                 // Tambahkan data lain yang diperlukan
@@ -159,7 +156,6 @@ class SuratIzinController extends Controller
                 'name' => $suratIzin->name,
                 'class' => $suratIzin->class,
                 'departement' => $suratIzin->departement,
-                'permission' => $suratIzin->permission,
                 'reason' => $suratIzin->reason,
                 'date_submission' => $suratIzin->date_submission,
                 // Tambahkan data lain yang diperlukan

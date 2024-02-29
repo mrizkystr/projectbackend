@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->integer('class');
             $table->string('departement');
-            $table->string('permission');
             $table->string('reason');
             $table->dateTime('date_submission')->nullable()->default(now());
             $table->timestamps();

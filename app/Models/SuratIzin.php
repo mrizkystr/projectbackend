@@ -15,7 +15,6 @@ class SuratIzin extends Model
         'name',
         'class',
         'departement',
-        'permission',
         'reason',
         'date_submission',
     ];
