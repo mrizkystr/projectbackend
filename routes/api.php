@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AbsensiController;
-use App\Http\Controllers\DataSiswaController;
 use App\Http\Controllers\SuratIzinController;
 use App\Http\Controllers\AbsenKelasController;
 use App\Http\Controllers\AbsensiGuruController;
@@ -12,7 +11,9 @@ use App\Http\Controllers\AbsensiMapelController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\SuratTerlambatController;
+use App\Http\Controllers\Api\Admin\DataGuruController;
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\DataSiswaController;
 use App\Http\Controllers\Api\Admin\PermissionController;
 use App\Http\Controllers\Api\Admin\StatusSuratIzinController;
 
@@ -58,9 +59,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
-        // Route for updating an existing status surat izin
-        Route::put('/status-surat-izin/{id}', [StatusSuratIzinController::class, 'updateStatus']);
     });
 });
 
@@ -125,12 +123,25 @@ Route::prefix('absensimapels')->group(function () {
     Route::post('/generate-pdf', [AbsensiMapelController::class, 'generateAbsensiMapel'])->name('generate.pdf');
 });
 
-Route::prefix('datasiswa')->group(function () {
+Route::prefix('datasiswas')->group(function () {
     Route::get('/', [DataSiswaController::class, 'index']);
     Route::post('/store', [DataSiswaController::class, 'store']);
     Route::get('/{id}', [DataSiswaController::class, 'show']);
     Route::put('/{id}', [DataSiswaController::class, 'update']);
     Route::delete('/{id}', [DataSiswaController::class, 'destroy']);
+});
+
+Route::prefix('dataguru')->group(function () {
+    // Route untuk menampilkan semua data guru
+    Route::get('/', [DataGuruController::class, 'index']);
+    // Route untuk menampilkan detail data guru berdasarkan ID
+    Route::get('/{id}', [DataGuruController::class, 'show']);
+    // Route untuk menyimpan data guru baru
+    Route::post('/store', [DataGuruController::class, 'store']);
+    // Route untuk memperbarui data guru berdasarkan ID
+    Route::put('/id}', [DataGuruController::class, 'update']);
+    // Route untuk menghapus data guru berdasarkan ID
+    Route::delete('/{id}', [DataGuruController::class, 'destroy']);
 });
 
 Route::prefix('buka_absensi')->group(function () {

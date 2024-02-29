@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
 use Illuminate\Http\Request;
-use App\DataSiswa;
+use App\Models\DataSiswa;
 use App\Http\Resources\DataSiswaResource;
 
 class DataSiswaController extends Controller
@@ -30,7 +30,7 @@ class DataSiswaController extends Controller
         $request->validate([
             'name' => 'required',
             'NISN' => 'required',
-            'tanggal_lahir' => 'required',
+            'tanggal_lahir' => 'required|date_format:Y-m-d',
             'alamat' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
@@ -72,7 +72,7 @@ class DataSiswaController extends Controller
         $request->validate([
             'name' => 'required',
             'NISN' => 'required',
-            'tanggal_lahir' => 'required',
+            'tanggal_lahir' => 'required|date_format:Y-m-d',
             'alamat' => 'required',
             'kelas' => 'required',
             'jurusan' => 'required',
