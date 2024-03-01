@@ -12,7 +12,7 @@ class AbsensiGuru extends Model
     protected $table = 'absensi_guru';
 
     protected $fillable = [
-        'name',
+        'data_guru_id',
         'attendance',
         'reason',
         'time',
@@ -27,4 +27,9 @@ class AbsensiGuru extends Model
         'time',
         'created_at',
     ];
+
+    public function guru()
+    {
+        return $this->belongsTo(DataGuru::class, 'data_guru_id');
+    }
 }

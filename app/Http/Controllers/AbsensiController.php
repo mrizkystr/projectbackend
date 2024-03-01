@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Dompdf\Dompdf;
 use App\Models\Absensi;
+use App\Models\DataSiswa;
 use Illuminate\Http\Request;
 use App\Http\Resources\AbsensiResource;
 use Illuminate\Support\Facades\Validator;
@@ -19,17 +20,22 @@ class AbsensiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'data_siswa_id'  => 'required', // Mengubah 'user_id' menjadi 'data_siswa_id'
             'class' => 'required|integer',
             'departement' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
             'reason' => 'required|string|max:255',
             'date_time' => 'required|date_format:Y-m-d',
         ]);
-
+    
+        // Mengambil data siswa berdasarkan ID yang diberikan
+        $dataSiswa = DataSiswa::findOrFail($validatedData['data_siswa_id']);
+    
+        // Membuat entitas Absensi dengan data yang divalidasi
         $absensi = Absensi::create($validatedData);
-
-        return new AbsensiResource($absensi);
+    
+        // Mengembalikan response dengan menyertakan data siswa
+        return (new AbsensiResource($absensi))->additional(['data_siswa' => $dataSiswa]);
     }
 
 
@@ -44,7 +50,7 @@ class AbsensiController extends Controller
         $absensi = Absensi::findOrFail($id);
 
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'data_siswa_id' => 'nullable|exists:users,id',
             'class' => 'required|integer',
             'departement' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',

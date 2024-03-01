@@ -12,7 +12,7 @@ class Absensi extends Model
     protected $table = 'absensi';
 
     protected $fillable = [
-        'name',
+        'data_siswa_id',
         'class',
         'departement',
         'attendance',
@@ -28,4 +28,10 @@ class Absensi extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function siswa()
+    {
+        return $this->belongsTo(DataSiswa::class, 'data_siswa_id');
+    }
+
 }

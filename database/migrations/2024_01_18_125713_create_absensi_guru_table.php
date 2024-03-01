@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('absensi_guru', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('data_guru_id')->references('id')->on('data_guru');
             $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);
             $table->text('reason');
             $table->dateTime('time')->nullable()->comment('Waktu absen');

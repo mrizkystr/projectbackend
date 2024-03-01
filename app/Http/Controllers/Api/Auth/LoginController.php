@@ -43,12 +43,17 @@ class LoginController extends Controller
                 'success' => false,
                 'message' => 'Email or Password is incorrect'
             ],400);
-        
+
+        $user   =  auth()->guard('api')->user();
+
+        $role = $user->getRoleNames();
+
         // response login "success" dengan generate "Token"
         return response()->json([
             'success'       => true,
             'user'          => auth()->guard('api')->user()->only(['name', 'email']),
             'permissions'   => auth()->guard('api')->user()->getPermissionArray(),
+            'role'          => $role,
             'token'         => $token
             ], 200);
     }

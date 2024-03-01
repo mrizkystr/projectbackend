@@ -16,7 +16,7 @@ class AbsensiGuruResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'data_guru_id' => $this->data_guru_id,
             'attendance' => $this->attendance,
             'reason' => $this->reason,
             'time' => $this->time,

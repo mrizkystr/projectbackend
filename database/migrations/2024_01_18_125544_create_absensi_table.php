@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('absensi', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('data_siswa_id')->references('id')->on('data_siswas');
             $table->integer('class');
             $table->string('departement');
             $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);

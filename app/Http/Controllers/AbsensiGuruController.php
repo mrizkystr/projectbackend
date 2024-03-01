@@ -31,7 +31,7 @@ class AbsensiGuruController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'data_guru_id' => 'required',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
             'reason' => 'nullable|string',
             'time' => 'nullable|date_format:H:m:s',
@@ -64,7 +64,7 @@ class AbsensiGuruController extends Controller
         $absensi_guru = AbsensiGuru::findOrFail($id);
 
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'data_guru_id' => 'required',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
             'reason' => 'nullable|string',
             'time' => 'nullable|date_format:H:m:s',
