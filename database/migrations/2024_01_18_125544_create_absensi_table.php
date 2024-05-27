@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('class');
             $table->string('departement');
             $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);
-            $table->text('reason');
+            $table->text('reason')->nullable();
             $table->dateTime('date_time')->nullable()->comment('Waktu absen');
             $table->timestamps();
         });

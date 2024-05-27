@@ -41,7 +41,7 @@ class LoginController extends Controller
             //response login "failed"
             return response()->json([
                 'success' => false,
-                'message' => 'Email or Password is incorrect'
+                'message' => 'Email atau pasword salah'
             ],400);
 
         $user   =  auth()->guard('api')->user();

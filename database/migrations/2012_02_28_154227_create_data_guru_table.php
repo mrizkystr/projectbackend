@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('NIP')->unique();
-            $table->dateTime('tanggal_lahir');
+            $table->date('tanggal_lahir');
             $table->text('alamat');
             $table->string('guru_mapel');
             $table->timestamps();

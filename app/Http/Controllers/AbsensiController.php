@@ -24,7 +24,7 @@ class AbsensiController extends Controller
             'class' => 'required|integer',
             'departement' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
-            'reason' => 'required|string|max:255',
+            'reason' => 'nullable|string|max:255',
             'date_time' => 'required|date_format:Y-m-d',
         ]);
     
@@ -54,7 +54,7 @@ class AbsensiController extends Controller
             'class' => 'required|integer',
             'departement' => 'required|string|max:255',
             'attendance' => 'required|string|in:hadir,izin,sakit,alfa',
-            'reason' => 'required|string|max:255',
+            'reason' => 'nullable|string|max:255',
             'date_time' => 'required|date_format:Y-m-d',
         ]);
 

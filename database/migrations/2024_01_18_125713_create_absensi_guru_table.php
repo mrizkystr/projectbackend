@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('data_guru_id')->references('id')->on('data_guru');
             $table->enum('attendance', ['hadir', 'izin', 'sakit', 'alfa']);
-            $table->text('reason');
+            $table->text('reason')->nullable();
             $table->dateTime('time')->nullable()->comment('Waktu absen');
             $table->timestamps();
         });
